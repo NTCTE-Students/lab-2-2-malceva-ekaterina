@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
+    <style>
+        * {
+            background: rgb(255, 231, 235)
+        }
+    </style>
 </head>
 <body>
     <h1>Login</h1>

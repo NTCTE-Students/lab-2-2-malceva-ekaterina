@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -77,5 +78,32 @@ class UserController extends Controller
 
         return redirect()
             -> route('index');
+    }
+    public function index(Request $request): View
+    {
+        if (Auth::check()) {
+
+            $user_tasks = Auth::user() -> tasks();
+
+            if ($request -> input('status_filter') && in_array($request -> input('status_filter'), ['in_progress', 'pending', 'complete'])) {
+                $user_tasks -> where('status', $request -> input('status_filter'));
+            }
+            if ($request -> input('order_by')) {
+                if ($request -> input('order_by') == 'date_desc') {
+                    $user_tasks -> orderByDesc('created_at');
+                }
+            }
+            if ($request -> input('find')) {
+                $user_tasks -> where('title', $request ->input('find')) -> get();
+            }
+
+            return view('index', [
+                'user_tasks' => $user_tasks,
+            ]);
+        } else {
+            return view('index', [
+                'user_tasks' => null,
+            ]);
+        }
     }
 }
